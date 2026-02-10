@@ -106,7 +106,11 @@
             let scene, camera, renderer;
             let sphere, solidMesh, wireframeMesh;
             let cube;
-            const cubeTarget = new THREE.Vector3();
+            // --- Stable 3D cursor tools ---
+const cubeTarget = new THREE.Vector3();
+const pointer = new THREE.Vector2();
+const raycaster = new THREE.Raycaster();
+const dragPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), -5); // plane at z = -5
 
 
             // Hand tracking variables
@@ -417,6 +421,8 @@ scene.add(cube);
                     for (let handIndex = 0; handIndex < results.multiHandLandmarks.length; handIndex++) {
                         const landmarks = results.multiHandLandmarks[handIndex];
                         // Use index finger tip (landmark 8) to drive the cube
+                        const landmarks = results.multiHandLandmarks[handIndex];
+
 const x = (0.5 - indexTip.x) * 10;      // flipped
 const y = -(indexTip.y - 0.5) * 6;
 const z = -indexTip.z * 10;
@@ -436,7 +442,21 @@ cube.position.lerp(new THREE.Vector3(x, y, z), 0.2);
                             // Get thumb tip and index finger tip positions
                             const thumbTip = landmarks[4];
                             const indexTip = landmarks[8];
-                            
+                            // ==== CONTROL RED CUBE WITH INDEX FINGER ====
+if (cube) {
+
+    // gjør finger til -1 til 1 koordinater
+    const x = (0.5 - indexTip.x) * 10;
+    const y = -(indexTip.y - 0.5) * 6;
+    const z = -5; // avstand inn i scenen
+
+    // smooth movement (ikke crazy flying)
+    cube.position.x += (x - cube.position.x) * 0.15;
+    cube.position.y += (y - cube.position.y) * 0.15;
+    cube.position.z += (z - cube.position.z) * 0.15;
+}
+
+
                             // Calculate the distance between thumb and index finger
                             const pinchDistance = calculateDistance(thumbTip, indexTip);
                             
