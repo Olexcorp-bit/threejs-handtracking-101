@@ -106,15 +106,19 @@
             let scene, camera, renderer;
             let sphere, solidMesh, wireframeMesh;
             let cube;
+            const cubeTarget = new THREE.Vector3();
+
 
             // Hand tracking variables
-            let rightHandActive = false;
-            let leftHandActive = false;
-            let lastColorChangeTime = 0;
-            const colorChangeDelay = 500; // milliseconds
-            let currentSphereSize = 1.0; // Default/starting size
-            let targetSphereSize = 1.0;  // Target size based on hand gesture
-            const smoothingFactor = 0.15; // Adjust this value between 0-1 (lower = smoother but slower)
+           const indexTip = landmarks[8];
+
+const x = (0.5 - indexTip.x) * 10;
+const y = -(indexTip.y - 0.5) * 6;
+const z = -indexTip.z * 10;
+
+cubeTarget.set(x, y, z);
+cube.position.lerp(cubeTarget, 0.2);
+
 
             // Keep canvas size in sync with window size
             function updateCanvasSize() {
@@ -413,10 +417,13 @@ scene.add(cube);
                     for (let handIndex = 0; handIndex < results.multiHandLandmarks.length; handIndex++) {
                         const landmarks = results.multiHandLandmarks[handIndex];
                         // Use index finger tip (landmark 8) to drive the cube
-const indexTip = landmarks[8];
-cube.position.x = (indexTip.x - 0.5) * 10;
-cube.position.y = -(indexTip.y - 0.5) * 6;
-cube.position.z = -indexTip.z * 10;
+const x = (0.5 - indexTip.x) * 10;      // flipped
+const y = -(indexTip.y - 0.5) * 6;
+const z = -indexTip.z * 10;
+
+cube.position.set(x, y, z);
+cube.position.lerp(new THREE.Vector3(x, y, z), 0.2);
+
 
                         const handedness = results.multiHandedness[handIndex].label;
                         const isLeftHand = handedness === 'Left';
