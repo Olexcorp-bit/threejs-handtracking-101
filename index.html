@@ -209,7 +209,13 @@
                 
                 // Create a sphere with vibrant neon color fill and white wireframe
                 const geometry = new THREE.SphereGeometry(2, 32, 32);
-                
+                sphere = new THREE.Group();
+const cubeGeometry = new THREE.BoxGeometry(1,1,1);
+const cubeMaterial = new THREE.MeshStandardMaterial({color:0xff0000});
+const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+cube.position.set(4,0,0);
+scene.add(cube);
+
                 // Create a group to hold both the solid and wireframe meshes
                 sphere = new THREE.Group();
                 
