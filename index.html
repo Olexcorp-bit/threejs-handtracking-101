@@ -105,7 +105,8 @@
             // Three.js variables
             let scene, camera, renderer;
             let sphere, solidMesh, wireframeMesh;
-            
+            let cube;
+
             // Hand tracking variables
             let rightHandActive = false;
             let leftHandActive = false;
@@ -212,7 +213,7 @@
                 sphere = new THREE.Group();
 const cubeGeometry = new THREE.BoxGeometry(1,1,1);
 const cubeMaterial = new THREE.MeshStandardMaterial({color:0xff0000});
-const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
 cube.position.set(4,0,0);
 scene.add(cube);
 
@@ -411,6 +412,12 @@ scene.add(cube);
                     // Process each hand
                     for (let handIndex = 0; handIndex < results.multiHandLandmarks.length; handIndex++) {
                         const landmarks = results.multiHandLandmarks[handIndex];
+                        // Use index finger tip (landmark 8) to drive the cube
+const indexTip = landmarks[8];
+cube.position.x = (indexTip.x - 0.5) * 10;
+cube.position.y = -(indexTip.y - 0.5) * 6;
+cube.position.z = -indexTip.z * 10;
+
                         const handedness = results.multiHandedness[handIndex].label;
                         const isLeftHand = handedness === 'Left';
                         
