@@ -116,7 +116,7 @@ const dragPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), -5); // plane at z
             // Hand tracking variables
            const indexTip = landmarks[8];
 
-const x = (0.5 - indexTip.x) * 10;
+const x = (indexTip.x - 0.5) * 10;
 const y = -(indexTip.y - 0.5) * 6;
 const z = -indexTip.z * 10;
 
